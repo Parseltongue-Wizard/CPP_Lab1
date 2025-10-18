@@ -1,5 +1,5 @@
-// Компiлятор: g++ 13.1 (C++20)
-// Команда: g++ -std=c++20 main.cpp -o affine
+// Compiler: g++ 13.1 (C++20)
+// Command: g++ -std=c++20 main.cpp -o affine
 
 #include <iostream>
 #include <fstream>
@@ -59,3 +59,4 @@ int main() {
     cout << "Complete. Output saved in output.txt\n";
     return 0;
 }
+
