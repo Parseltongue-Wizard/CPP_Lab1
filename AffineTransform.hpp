@@ -1,46 +1,43 @@
-#ifndef AFFINETRANSFORM_HPP
-#define AFFINETRANSFORM_HPP
+#pragma once
 
-#include <array>
-#include <stdexcept>
-#include <iostream>
-
-using namespace std;
+#include <istream>
 
 struct Point {
     double x{};
     double y{};
 };
 
+struct Matrix2x2 {
+    double m11{}, m12{}, m21{}, m22{};
+};
+
 class AffineTransform {
 private:
-    array<array<double, 2>, 2> M{};
-    array<double, 2> v{};
+    Matrix2x2 m;
+    Point t;
 
 public:
     AffineTransform() = default;
 
     AffineTransform(double a, double b, double c, double d, double e, double f) {
-        M = { {{a, b}, {c, d}} };
-        v = { e, f };
+        m = {a, b, c, d};
+        t = {e, f};
     }
 
     Point operator()(const Point& p) const noexcept {
-        Point result;
-        result.x = M[0][0] * p.x + M[0][1] * p.y + v[0];
-        result.y = M[1][0] * p.x + M[1][1] * p.y + v[1];
-        return result;
+        Point res;
+        res.x = m.m11 * p.x + m.m12 * p.y + t.x;
+        res.y = m.m21 * p.x + m.m22 * p.y + t.y;
+        return res;
     }
 
-    friend istream& operator>>(istream& is, AffineTransform& t) {
+    friend std::istream& operator>>(std::istream& is, AffineTransform& t) {
         double a, b, c, d, e, f;
         if (!(is >> a >> b >> c >> d >> e >> f)) {
-            is.setstate(ios::failbit);
+            is.setstate(std::ios::failbit);
             return is;
         }
         t = AffineTransform(a, b, c, d, e, f);
         return is;
     }
 };
-
-#endif
